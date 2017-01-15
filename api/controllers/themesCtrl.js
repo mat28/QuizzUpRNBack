@@ -17,7 +17,7 @@ module.exports.getAllTheme = function(req, res){
           console.log(themes);
           res
             .status(200)
-            .json(themes);
+            .json({success : true, data : {themes : themes}});
         }
       });
 }
@@ -28,6 +28,7 @@ module.exports.getOneTheme = function(req, res){
 
   Theme
       .findById(themeId)
+      .select('-questions')
       .exec(function(err, theme){
         if(err){
           res
@@ -36,7 +37,7 @@ module.exports.getOneTheme = function(req, res){
         } else {
           res
             .status(200)
-            .json(theme);
+            .json({success : true, data : {theme : theme}});
         }
       });
 }
@@ -49,7 +50,7 @@ module.exports.addOneTheme = function(req, res){
 module.exports.getRandomQuestionByThemeId = function(req, res) {
   console.log("get Random Question")
   var themeId = req.params.themeId;
-
+  console.log(themeId);
   Theme
       .findById(themeId)
       .exec(function(err, theme){
@@ -58,11 +59,11 @@ module.exports.getRandomQuestionByThemeId = function(req, res) {
             .status(500)
             .json(err);
         } else {
-
-          var randomIndex = Math.floor((Math.random() * theme.questions.length) + 1);
+          var randomIndex = Math.floor((Math.random() * theme.questions.length));
+          console.log(theme.questions[randomIndex]);
           res
             .status(200)
-            .json(theme.questions[randomIndex]);
+            .json({success : true, data : {question : theme.questions[randomIndex]}});
         }
       });
 }

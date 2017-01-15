@@ -15,9 +15,10 @@ module.exports.getUserById = function(req,res){
           .status(500)
           .json(err);
       } else {
+        console.log("user", user);
         res
           .status(200)
-          .json(user);
+          .json({success : true, data: {user : user}});
       }
     });
 }
@@ -51,8 +52,6 @@ module.exports.login = function(req, res) {
   var email = req.body.email.toLowerCase();
   var password = req.body.password;
 
-  console.log(email);
-
   User.findOne({
     email: email
   }).exec(function(err, user) {
@@ -64,7 +63,7 @@ module.exports.login = function(req, res) {
       if (bcrypt.compareSync(password, user.password)) {
         console.log('User found', user);
         var token = jwt.sign({ email: user.email }, 's3cretmma2', { expiresIn: 360000 });
-        res.status(200).json({success: true, token: token, userId: user._id});
+        res.status(200).json({success: true, data : {jwtAccessToken: token, user: user}});
       } else {
         res.status(401).json('Unauthorized');
       }

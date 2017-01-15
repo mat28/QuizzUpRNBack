@@ -13,6 +13,10 @@ router
   .post(ctrlUsers.login);
 
 router
+    .route('/auth/login')
+    .post(ctrlUsers.login);
+
+router
   .route('/users/:userId')
   .get(ctrlUsers.authenticate,ctrlUsers.getUserById)
 
